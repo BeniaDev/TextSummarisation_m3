@@ -2,8 +2,10 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 import pandas as pd
 from razdel import sentenize
 from nltk.corpus import stopwords
+from text_utils import tokenize
 # download stopwords corpus, you need to run it once
 # nltk.download("stopwords")
+
 
 from pymystem3 import Mystem
 
