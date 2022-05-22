@@ -8,12 +8,7 @@
 ### Train Model:
 * cli enabled :) =>
 ```
-foo@bar:~$ python3 model.py --dataset=/path/to/train/dataset
-```
-
-### Evaluate:
-```
-foo@bar:~$ python model.py evaluate --dataset=/path/to/evaluation/dataset
+foo@bar:~$ python3 runner.py --text=/path/to/test_text.txt
 ```
 
 
@@ -23,10 +18,10 @@ foo@bar:~$ python model.py evaluate --dataset=/path/to/evaluation/dataset
 ### Test API of Flask App from api.py
 
 # Progress: 
-- [x] Luhn Baseline
+- [x] Luhn Baseline Summarizer
 - [ ] CLI
-- Better Model
-- Metrics Section in README
+- [ ] Advanced Summarizer Model
+- [ ] Metrics Section in README
 
 
 # Used materials:
