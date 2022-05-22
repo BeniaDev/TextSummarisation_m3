@@ -1,0 +1,3 @@
+nltk
+pymystem3
+natasha
