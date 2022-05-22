@@ -19,7 +19,9 @@ foo@bar:~$ python3 runner.py --text=/path/to/test_text.txt
 
 # Progress: 
 - [x] Luhn Baseline Summarizer
-- [ ] CLI
+- [ ] Add Check for Text Language and Stemmer wrapper for ru and eng cases
+- [ ] Wrapp Code functions by Working Logging
+- [x] CLI
 - [ ] Advanced Summarizer Model
 - [ ] Metrics Section in README
 
