@@ -1,3 +1,4 @@
 nltk
 pymystem3
 natasha
+cld2-cffi

@@ -1,63 +1,29 @@
+from pathlib import Path
 from sklearn.feature_extraction.text import TfidfVectorizer
 import pandas as pd
-from razdel import sentenize
-from nltk.corpus import stopwords
-from text_utils import tokenize
+from text_utils import tokenize, detect_language, custom_sentenize
 import numpy as np
-# download stopwords corpus, you need to run it once
-# nltk.download("stopwords")
-
-
-from pymystem3 import Mystem
-
-#Create lemmatizer and stopwords list
-mystem = Mystem()
-russian_stopwords = stopwords.words("russian")
 
 
 class LuhnSummarizer():
-    def __init__(self, is_lemmatize: bool = True):
+    def __init__(self):
         self.is_lemmatize = True
         self.sf_word_threshold = 0.002
         self.sf_sentence_threshold = 0.3
         self.max_not_sf_seq_words = 4
-
-    def custom_sentenize(self, text: str) -> list:
-        sents = []
-        for line in text.splitlines():
-            line = line.lower() if line.strip().endswith("\n") else line
-            sents += [sent.text for sent in sentenize(line) if sent.text != ""]
-
-        sent_char_lst = []
-        char_num = 0
-        for sent_num, sent in enumerate(sents):
-            while char_num < len(text):
-                if text[char_num:char_num + len(sent)] == sent:
-                    # Sentence found
-                    new_sent = text[char_num:char_num + len(sent)]
-                    sent_char_lst.append(new_sent)
-                    char_num += len(new_sent)
-                    break
-                else:
-                    sent_char_lst.append(text[char_num])
-                    char_num += 1
-        # remaining characters
-        if char_num < len(text):
-            sent_char_lst.append(text[char_num:])
-
-        return [x for x in sent_char_lst if x != " "]
+        self._text_lang = "RUSSIAN" # default value
 
     def tokenize_sent(self, sentences: list) -> list:
 
         # tokenization
-        tokens = [tokenize(sent) for sent in sentences]  # [x for sent in sentences for x in tokenize(sent)]
+        tokens = [tokenize(sent, self._text_lang) for sent in sentences]
 
         return tokens
 
     def create_word_freq_dict(self, text: str) -> dict:
         # log(f"tokens:{tokens}")
 
-        tokens = tokenize(text)
+        tokens = tokenize(text, self._text_lang)
         vectorizer = TfidfVectorizer(use_idf=False)
         X = vectorizer.fit_transform(tokens)
         features_names_out = vectorizer.get_feature_names_out()
@@ -99,8 +65,9 @@ class LuhnSummarizer():
         return significance_factor
 
     def summarize(self, text: str) -> str:
+        self._text_lang = detect_language(text)
         # sentence segmentation
-        sentences = self.custom_sentenize(text)
+        sentences = custom_sentenize(text)
         # print(len(sentences))
         # log(sentences)
 
@@ -109,7 +76,7 @@ class LuhnSummarizer():
 
         sentences_sf = []
         for sent in sentences:
-            sentence_tokens = tokenize(sent)
+            sentence_tokens = tokenize(sent, self._text_lang)
             # log(sentence_tokens)
 
             sentences_sf.append(
@@ -127,3 +94,17 @@ class LuhnSummarizer():
                              sentences_sf[i] >= sentence_sf_threshold_percentile_75]
 
         return "".join(summary_sentences)
+
+
+
+if __name__ =="__main__":
+    summarizator = LuhnSummarizer()
+
+
+    test_article = ""
+    with open (Path("../../data/test_article_eng.txt"), "r") as f:
+        test_article = "".join(f.readlines())
+
+    print(summarizator.summarize(test_article))
+
+    # print(detect_language(test_article))
