@@ -5,41 +5,34 @@ import typer
 from typing import Optional
 from pathlib import Path
 
-logging.basicConfig(filename='../logs/app.log', level=logging.INFO, format='%(asctime)s - %(message)s',
+logging.basicConfig(filename=Path('./logs/app.log'), level=logging.INFO, format='%(asctime)s - %(message)s',
                     datefmt='%d-%b-%y %H:%M:%S', filemode="a")
 
 app = typer.Typer()
 
+from luhn_summarizer import LuhnSummarizer
 
-@app.command()
-def train():
-    """
-    API call for model.train()
-    :param dataset: path to train dataset
-    :return: None
-    """
-    pass
+summarizer = LuhnSummarizer()
 
 
 @app.command()
-def predict():
+def summarize(document_path: Optional[Path]):
     """
-    API call to model.recommend()
-    :param user_id: user id in System
-    :param M: count of recommend films
-    :return: (movies_id_list, predicted_ratings_list)
+    API call to model.summarize()
+    :param document_path: Article Text for summarization
     """
-    pass
+    with open(document_path, "r") as f:
+        doc = "".join(f.readlines())
 
+    summary = summarizer.summarize(doc)
 
+    # saving results
+    save_path = Path("./data/summary_results/ru_summary_test.txt")
+    with open(save_path, "w") as f:
+        f.writelines(summary)
 
-@app.command()
-def reload():
-    """
-    API call to model.warmup(). Just reload the model from /app/model/
-    :return: None
-    """
-    pass
+    logging.info(f"Summary for {document_path} has been saved to {save_path} successfully!")
+
 
 
 if __name__ == '__main__':

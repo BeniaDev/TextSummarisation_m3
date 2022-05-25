@@ -7,7 +7,6 @@ import numpy as np
 
 class LuhnSummarizer():
     def __init__(self):
-        self.is_lemmatize = True
         self.sf_word_threshold = 0.002
         self.sf_sentence_threshold = 0.3
         self.max_not_sf_seq_words = 4
