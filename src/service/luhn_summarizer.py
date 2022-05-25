@@ -5,14 +5,22 @@ from text_utils import tokenize, detect_language, custom_sentenize
 import numpy as np
 
 
-class LuhnSummarizer():
+class LuhnExtractiveSummarizer():
+    """
+    Implementation of the LuhnExtractiveSummarizer  from H.P.Luhn article:
+    https://courses.ischool.berkeley.edu/i256/f06/papers/luhn58.pdf
+    """
     def __init__(self):
         self.sf_word_threshold = 0.002
         self.sf_sentence_threshold = 0.3
-        self.max_not_sf_seq_words = 4
         self._text_lang = "RUSSIAN" # default value
 
     def tokenize_sent(self, sentences: list) -> list:
+        """
+        split raw text to tokens
+        :param sentences:
+        :return: list of tokenized sents
+        """
 
         # tokenization
         tokens = [tokenize(sent, self._text_lang) for sent in sentences]
@@ -20,6 +28,11 @@ class LuhnSummarizer():
         return tokens
 
     def create_word_freq_dict(self, text: str) -> dict:
+        """
+        create word freq dict for original document
+        :param text:
+        :return: stemmed word frequence dict for summarized document
+        """
         # log(f"tokens:{tokens}")
 
         tokens = tokenize(text, self._text_lang)
@@ -40,16 +53,25 @@ class LuhnSummarizer():
         return freq_dict
 
     def get_sentence_significance_word_mask(self, sentence_words_mask: list) -> list:
+        """
+        strip sent by clustering the meaningful part of sentence for proper significance_factor computing
+        :param sentence_words_mask:
+        :return: sentences_word_mask
+        """
         first_sf_word_indx = sentence_words_mask.index(1)
         last_sf_word_indx = len(sentence_words_mask) - 1 - sentence_words_mask[::-1].index(1)
 
         return sentence_words_mask[first_sf_word_indx: last_sf_word_indx + 1]
 
     def compute_significance_factor(self, freq_dict: dict, sentence: list) -> np.float16:
+        """
+        Implementation of significance_factor counting for sentence
+        :param freq_dict:
+        :param sentence:
+        :return: significance_factor for sentence
+        """
         sentence_words_mask = [1 if freq_dict[word] else 0 \
                                for word in sentence if word in freq_dict.keys()]
-        # example of sentence_words_mask: [0, 0, 1, 0, 1, 1, 0, 0, 1, 0, 0] 1 - sf word in sentence and 0 - not sf word
-        # print(sentence_words_mask)
 
         if sum(sentence_words_mask) == 0:
             return 0
@@ -64,6 +86,11 @@ class LuhnSummarizer():
         return significance_factor
 
     def summarize(self, text: str) -> str:
+        """
+        Main Summarizer method for creating original text extractive summary
+        :param text:
+        :return:
+        """
         self._text_lang = detect_language(text)
         # sentence segmentation
         sentences = custom_sentenize(text)
@@ -97,7 +124,7 @@ class LuhnSummarizer():
 
 
 if __name__ =="__main__":
-    summarizator = LuhnSummarizer()
+    summarizator = LuhnExtractiveSummarizer()
 
 
     test_article = ""

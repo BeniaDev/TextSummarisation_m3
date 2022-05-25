@@ -10,9 +10,9 @@ logging.basicConfig(filename=Path('./logs/app.log'), level=logging.INFO, format=
 
 app = typer.Typer()
 
-from luhn_summarizer import LuhnSummarizer
+from luhn_summarizer import LuhnExtractiveSummarizer
 
-summarizer = LuhnSummarizer()
+summarizer = LuhnExtractiveSummarizer()
 
 
 @app.command()
