@@ -1,25 +1,20 @@
-# TextSummarisation_m3
+# Extractive Text Summarization
 
 ## Creds:
 * Eugene Borisov, 971901 HITS, email: evgenyboriso@gmail.com
 
 ## "How to"
 
-### Train Model:
+### Inference Baseline LuhnExtractiveSummarizer Model:
 * cli enabled :) =>
 ```
-foo@bar:~$ python3 runner.py --text=/path/to/test_text.txt
+foo@bar:~$ python3 src/service/runner.py ./data/test_article_ru.txt
 ```
 
-
-### Deployment:
-
-
-### Test API of Flask App from api.py
 
 # Progress: 
 - [x] Luhn Baseline Summarizer
-- [ ] Add Check for Text Language and Stemmer wrapper for ru and eng cases
+- [x] Add Check for Text Language and Stemmer wrapper for ru and eng cases
 - [ ] Wrapp Code functions by Working Logging
 - [x] CLI
 - [ ] Advanced Summarizer Model
