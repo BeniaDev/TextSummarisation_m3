@@ -1,3 +1,4 @@
+import logging
 from pathlib import Path
 from sklearn.feature_extraction.text import TfidfVectorizer
 import pandas as pd
@@ -49,6 +50,8 @@ class LuhnExtractiveSummarizer():
                                 reverse=True))  # сортируем словарь частотностей слов по убыванию
         # print(f"Freq Dict before split by threshold: {freq_dict}")
         freq_dict = {k: v for k, v in freq_dict.items() if v >= self.sf_word_threshold}
+
+        logging.info(f"Significant words in descending order of frequency: {freq_dict}")
 
         return freq_dict
 
