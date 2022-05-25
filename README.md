@@ -11,7 +11,6 @@
 foo@bar:~$ python3 src/service/runner.py ./data/test_article_ru.txt
 ```
 
-
 # Progress: 
 - [x] Luhn Baseline Summarizer
 - [x] Add Check for Text Language and Stemmer wrapper for ru and eng cases
@@ -22,3 +21,4 @@ foo@bar:~$ python3 src/service/runner.py ./data/test_article_ru.txt
 
 
 # Used materials:
+Luhn Extractive Summarization approach article: https://courses.ischool.berkeley.edu/i256/f06/papers/luhn58.pdf
