@@ -37,7 +37,7 @@ class LuhnExtractiveSummarizer():
         # log(f"tokens:{tokens}")
 
         tokens = tokenize(text, self._text_lang)
-        vectorizer = TfidfVectorizer(use_idf=False)
+        vectorizer = TfidfVectorizer(use_idf=True)
         X = vectorizer.fit_transform(tokens)
         features_names_out = vectorizer.get_feature_names_out()
 
@@ -122,7 +122,10 @@ class LuhnExtractiveSummarizer():
         summary_sentences = [sent for i, sent in enumerate(sentences) if
                              sentences_sf[i] >= sentence_sf_threshold_percentile_75]
 
-        return "".join(summary_sentences)
+        summary = "".join(summary_sentences)
+        logging.info(f"Final Summary: {summary}")
+
+        return summary
 
 
 
