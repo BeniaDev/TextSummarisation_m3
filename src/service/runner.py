@@ -5,13 +5,17 @@ import typer
 from typing import Optional
 from pathlib import Path
 
-logging.basicConfig(filename=Path('./logs/app.log'), level=logging.INFO, format='%(asctime)s - %(message)s',
-                    datefmt='%d-%b-%y %H:%M:%S', filemode="a")
+logging.basicConfig(level=logging.INFO,
+                    handlers=[
+                        logging.FileHandler("./logs/app.log", "a")
+                    ],
+                    format='[%(asctime)s | %(levelname)s]: %(message)s',
+                    datefmt='%m.%d.%Y %H:%M:%S')
+
 
 app = typer.Typer()
 
 from luhn_summarizer import LuhnExtractiveSummarizer
-
 summarizer = LuhnExtractiveSummarizer()
 
 
