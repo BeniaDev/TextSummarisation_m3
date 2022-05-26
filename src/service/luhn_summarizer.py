@@ -5,16 +5,23 @@ import pandas as pd
 from text_utils import tokenize, detect_language, custom_sentenize
 import numpy as np
 
+# constants
+SF_WORD_THRESHOLD = 0.002
+SF_SENTENCE_THRESHOLD = 0.3
+DEFAULT_TEXT_LANG = "RUSSIAN"
+
 
 class LuhnExtractiveSummarizer():
     """
     Implementation of the LuhnExtractiveSummarizer  from H.P.Luhn article:
     https://courses.ischool.berkeley.edu/i256/f06/papers/luhn58.pdf
     """
-    def __init__(self):
-        self.sf_word_threshold = 0.002
-        self.sf_sentence_threshold = 0.3
-        self._text_lang = "RUSSIAN" # default value
+
+    def __init__(self, sf_word_threshold: float = SF_WORD_THRESHOLD,
+                 sf_sentence_threshold: float = SF_SENTENCE_THRESHOLD):
+        self.sf_word_threshold = sf_word_threshold
+        self.sf_sentence_threshold = sf_sentence_threshold
+        self._text_lang = DEFAULT_TEXT_LANG
 
     def tokenize_sent(self, sentences: list) -> list:
         """
@@ -130,13 +137,11 @@ class LuhnExtractiveSummarizer():
         return summary
 
 
-
-if __name__ =="__main__":
+if __name__ == "__main__":
     summarizator = LuhnExtractiveSummarizer()
 
-
     test_article = ""
-    with open (Path("../../data/test_article_eng.txt"), "r") as f:
+    with open(Path("../../data/netflix_test_article_ru.txt"), "r") as f:
         test_article = "".join(f.readlines())
 
     print(summarizator.summarize(test_article))
