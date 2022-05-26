@@ -42,13 +42,13 @@ class LuhnExtractiveSummarizer():
         features_names_out = vectorizer.get_feature_names_out()
 
         freq_df = pd.DataFrame(X.toarray(), columns=features_names_out)  # составляем датафрейм частотностей слов
-        # print(f"Features Names Out: {features_names_out}")
+        # log(f"Features Names Out: {features_names_out}")
 
         freq_dict = {word: np.sum(freq_df[word].values) / len(list(freq_df.keys())) for word in features_names_out}
 
         freq_dict = dict(sorted(freq_dict.items(), key=lambda y: y[1],
                                 reverse=True))  # сортируем словарь частотностей слов по убыванию
-        # print(f"Freq Dict before split by threshold: {freq_dict}")
+        # log(f"Freq Dict before split by threshold: {freq_dict}")
         freq_dict = {k: v for k, v in freq_dict.items() if v >= self.sf_word_threshold}
 
         logging.info(f"Significant words in descending order of frequency: {freq_dict}")
@@ -83,22 +83,26 @@ class LuhnExtractiveSummarizer():
         number_of_sf_words = sum(sentence_words_mask)
         total_number_of_bracketed_words = len(sentence_words_mask)
 
-        # print(f"number_of_sf_words: {number_of_sf_words}, total_number_of_bracketed_words: {total_number_of_bracketed_words}")
+        # log(f"number_of_sf_words: {number_of_sf_words}, total_number_of_bracketed_words: {total_number_of_bracketed_words}")
         significance_factor = number_of_sf_words ** 2 / total_number_of_bracketed_words
 
         return significance_factor
 
     def summarize(self, text: str) -> str:
         """
-        Main Summarizer method for creating original text extractive summary
+        Creating Extractive Summary from input text
         :param text:
-        :return:
+        :return: summary
         """
         self._text_lang = detect_language(text)
+
+        if self._text_lang == "Unknown":
+            logging.info("Unable to detect text language. Check your input file format!!!")
+            return ""
+
+        logging.info(f"Input language Detected: {self._text_lang}")
         # sentence segmentation
         sentences = custom_sentenize(text)
-        # print(len(sentences))
-        # log(sentences)
 
         text_freq_dict = self.create_word_freq_dict(text)
         # log(text_freq_dict)
@@ -115,8 +119,6 @@ class LuhnExtractiveSummarizer():
         sentences_sf.sort(reverse=True)
 
         sentence_sf_threshold_percentile_75 = np.percentile(sentences_sf, 75)
-        # print(sentences_sf)
-        # print(sentences_sf[ranking_ind_uppper_bound])
         # log(min(sentences_sf[:ranking_ind_uppper_bound]))
 
         summary_sentences = [sent for i, sent in enumerate(sentences) if
