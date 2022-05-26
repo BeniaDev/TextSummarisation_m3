@@ -14,7 +14,7 @@ foo@bar:~$ python3 src/service/runner.py ./data/test_article_ru.txt
 # Progress: 
 - [x] Luhn Baseline Summarizer
 - [x] Add Check for Text Language and Stemmer wrapper for ru and eng cases
-- [ ] Wrapp Code functions by Working Logging
+- [x] Wrapp Code functions by Working Logging
 - [x] CLI
 - [ ] Advanced Summarizer Model
 - [ ] Metrics Section in README
