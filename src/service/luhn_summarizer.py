@@ -123,15 +123,29 @@ class LuhnExtractiveSummarizer():
                 self.compute_significance_factor(text_freq_dict, sentence_tokens) if len(sentence_tokens) > 0 else 0)
         # log(sentences_sf)
 
+        orig_sentences_sf = sentences_sf.copy()
         sentences_sf.sort(reverse=True)
+        #print(sentences_sf)
+        sentences_sf_threshold_5 = sentences_sf[5]
+        sentences_sf_threshold_10 = sentences_sf[10]
+
+        # print(orig_sentences_sf)
+        # print(sentences_sf_threshold_5)
+        # print(sentences_sf_threshold_10)
+        # print(sentences_sf)
 
         sentence_sf_threshold_percentile_75 = np.percentile(sentences_sf, 75)
+        #print(sentence_sf_threshold_percentile_75)
+
         # log(min(sentences_sf[:ranking_ind_uppper_bound]))
 
         summary_sentences = [sent for i, sent in enumerate(sentences) if
-                             sentences_sf[i] >= sentence_sf_threshold_percentile_75]
+                             orig_sentences_sf[i] > sentence_sf_threshold_percentile_75]
+        # print(summary_sentences)
+        #
+        print(len(summary_sentences))
 
-        summary = "".join(summary_sentences)
+        summary = "\n".join(summary_sentences)
         logging.info(f"Final Summary: {summary}")
 
         return summary

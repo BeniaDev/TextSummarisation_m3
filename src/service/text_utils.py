@@ -55,21 +55,29 @@ def custom_sentenize(text: str) -> list:
         line = line.lower() if line.strip().endswith("\n") else line
         sents += [sent.text for sent in sentenize(line) if sent.text != ""]
 
-    sent_char_lst = []
-    char_num = 0
-    for sent_num, sent in enumerate(sents):
-        while char_num < len(text):
-            if text[char_num:char_num + len(sent)] == sent:
-                # Sentence found
-                new_sent = text[char_num:char_num + len(sent)]
-                sent_char_lst.append(new_sent)
-                char_num += len(new_sent)
-                break
-            else:
-                sent_char_lst.append(text[char_num])
-                char_num += 1
-    # remaining characters
-    if char_num < len(text):
-        sent_char_lst.append(text[char_num:])
+    # sent_char_lst = []
+    # char_num = 0
+    # for sent_num, sent in enumerate(sents):
+    #     while char_num < len(text):
+    #         if text[char_num:char_num + len(sent)] == sent:
+    #             # Sentence found
+    #             new_sent = text[char_num:char_num + len(sent)]
+    #             sent_char_lst.append(new_sent)
+    #             char_num += len(new_sent)
+    #             break
+    #         else:
+    #             sent_char_lst.append(text[char_num])
+    #             char_num += 1
+    # # remaining characters
+    # if char_num < len(text):
+    #     sent_char_lst.append(text[char_num:])
+    #
+    # return [x for x in sent_char_lst if x != " "]
 
-    return [x for x in sent_char_lst if x != " "]
+
+    return sents
+
+
+
+# if __name__ == "__main__":
+#     print("это" in stopwords_dict["RUSSIAN"])
